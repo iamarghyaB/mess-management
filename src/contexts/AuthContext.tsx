@@ -109,10 +109,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, name: string, phone?: string) => {
     setLoading(true);
+    const redirectUrl = typeof window !== 'undefined' && window.location.origin
+      ? window.location.origin
+      : 'https://mess-management-seven-gamma.vercel.app';
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name, phone } },
+      options: { 
+        data: { name, phone },
+        emailRedirectTo: redirectUrl,
+      },
     });
 
     if (error) {
